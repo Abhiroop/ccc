@@ -5,9 +5,9 @@ data Expr = Val Int
           | Add Expr Expr
           deriving Show
 
-eval :: Expr -> Int
-eval (Val n) = n
-eval (Add e1 e2) = eval e1 + eval e2
+-- eval :: Expr -> Int
+-- eval (Val n) = n
+-- eval (Add e1 e2) = eval e1 + eval e2
 
 -- Adding a stack
 type Stack = [Int]
@@ -21,3 +21,6 @@ push n s = n : s
 
 add :: Stack -> Stack
 add (m:n:s) = n + m :s
+
+eval :: Expr -> Int
+eval e = head (eval' e [])
