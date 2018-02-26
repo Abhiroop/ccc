@@ -59,7 +59,14 @@ eval'' (Add x y) c = eval'' x (eval'' y (addC c))
 
 data Code = HALT | PUSH Int Code | ADD Code deriving Show
 
-exec :: Code -> Cont
-exec HALT       = haltC
-exec (PUSH n c) = pushC n (exec c)
-exec (ADD c)    = addC (exec c)
+exec :: Code -> Stack -> Stack
+exec HALT s          = s
+exec (PUSH n c) s    = exec c (n:s)
+exec (ADD c) (m:n:s) = exec c (n+m:s)
+
+comp :: Expr -> Code
+comp e = comp' e HALT
+
+comp' :: Expr -> Code -> Code
+comp' (Val n) c   = PUSH n c
+comp' (Add x y) c = comp' x (comp' y (ADD c))
